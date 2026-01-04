@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Game Hewan Laut</title>
+    <audio id="opening" src="intro.mp3"></audio>
+
+    <style>
+      .halaman-awal {
+        position: fixed;
+        inset: 0;
+        background: url("gambar/background-laut.jpg") no-repeat center;
+        background-size: cover;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 20;
+      }
+
+      .box-awal {
+        background: rgba(0, 0, 0, 0.4);
+        padding: 30px;
+        border-radius: 25px;
+        text-align: center;
+        color: white;
+        animation: goyang 4s ease-in-out infinite;
+      }
+      .judul-animasi {
+        font-size: 38px;
+        font-weight: bold;
+        animation: muncul 1.5s ease-out, ombak 3s ease-in-out infinite;
+      }
+
+      @keyframes muncul {
+        from {
+          transform: translateY(40px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes ombak {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .box-awal h1 {
+        font-size: 36px;
+      }
+
+      .box-awal button {
+        margin-top: 20px;
+        font-size: 24px;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Comic Sans MS", Arial;
+        background: url("background-laut.jpg") no-repeat center center fixed;
+        background-size: cover;
+        overflow: hidden;
+        color: white;
+
+        display: flex;
+        justify-content: center; /* tengah ke samping */
+        align-items: center; /* tengah ke atas-bawah */
+        height: 100vh;
+      }
+
+      /* ikan animasi */
+      .ikan {
+        position: absolute;
+        width: 80px;
+        animation: berenang 15s linear infinite;
+      }
+
+      @keyframes berenang {
+        from {
+          left: -100px;
+        }
+        to {
+          left: 100%;
+        }
+      }
+
+      .game-box {
+        background: rgba(0, 0, 0, 0.35);
+        width: 80%;
+        max-width: 500px;
+        padding: 25px;
+        border-radius: 25px;
+        text-align: center;
+
+        animation: goyang 4s ease-in-out infinite;
+      }
+
+      @keyframes goyang {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+      .logo-sekolah {
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        z-index: 10;
+      }
+
+      .logo-sekolah img {
+        width: 150px;
+      }
+
+      .logo-sekolah span {
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        text-shadow: 1px 1px 3px #000;
+      }
+
+      button {
+        font-size: 22px;
+        padding: 18px 25px;
+        margin: 12px;
+        min-width: 200px;
+
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+
+        background: rgb(105, 184, 218);
+        color: #333;
+        font-weight: bold;
+
+        box-shadow: 0 6px 0 #49bab3;
+      }
+
+      button:active {
+        transform: translateY(4px);
+        box-shadow: 0 2px 0 #0859a0;
+      }
+      #jawaban {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      button:hover {
+        background: #248ec7;
+      }
+
+      img.hewan {
+        width: 200px;
+      }
+      .bubble {
+        position: absolute;
+        bottom: -50px;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        animation: naik 10s infinite ease-in;
+      }
+
+      @keyframes naik {
+        0% {
+          transform: translateY(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.6;
+        }
+        100% {
+          transform: translateY(-120vh);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Halaman Awal -->
+    <div class="halaman-awal" id="awal">
+      <div class="box-awal">
+        <img src="gambar/logo-ra-al-ukhuah.png" width="120" /><br /><br />
+
+        <h1 class="judul-animasi">🌊 Game Hewan Laut 🌊</h1>
+        <p>RA Al-Ukhuah<br />Raudhatul Athfal</p>
+
+        <button onclick="mulaiGame()">▶ Mulai Bermain</button>
+      </div>
+    </div>
+
+    <audio id="audioBenar" src="benar.mp3"></audio>
+    <audio id="audioSalah" src="salah.mp3"></audio>
+    <div class="logo-sekolah">
+      <img src="ra.png" alt="Logo RA Al-Ukhuah" />
+      <span>RA Al-Ukhuah<br />Raudhatul Athfal</span>
+    </div>
+
+    <!-- Gelembung udara -->
+    <div
+      class="bubble"
+      style="left: 10%; width: 20px; height: 20px; animation-duration: 8s"
+    ></div>
+    <div
+      class="bubble"
+      style="left: 25%; width: 15px; height: 15px; animation-duration: 6s"
+    ></div>
+    <div
+      class="bubble"
+      style="left: 40%; width: 25px; height: 25px; animation-duration: 10s"
+    ></div>
+    <div
+      class="bubble"
+      style="left: 55%; width: 18px; height: 18px; animation-duration: 7s"
+    ></div>
+    <div
+      class="bubble"
+      style="left: 70%; width: 22px; height: 22px; animation-duration: 9s"
+    ></div>
+    <div
+      class="bubble"
+      style="left: 85%; width: 12px; height: 12px; animation-duration: 5s"
+    ></div>
+
+    <!-- animasi ikan -->
+    <img src="ikan.png" class="ikan" style="top: 50px" />
+    <img
+      src="lumba-lumba.png"
+      class="ikan"
+      style="top: 150px; animation-delay: 3s"
+    />
+    <img
+      src="ikan-buntal.png"
+      class="ikan"
+      style="top: 250px; animation-delay: 6s"
+    />
+
+    <div class="game-box">
+      <h1>🌊 Tebak Hewan Laut 🌊</h1>
+      <p>Soal <span id="nomor">1</span> dari 10</p>
+
+      <img id="gambar" class="hewan" />
+
+      <div id="jawaban"></div>
+      <h2 id="pesan"></h2>
+    </div>
+
+    <script>
+      function mulaiGame() {
+        document.getElementById("opening").pause();
+        document.getElementById("awal").style.display = "none";
+      }
+      window.addEventListener(
+        "click",
+        () => {
+          document.getElementById("opening").play();
+        },
+        { once: true }
+      );
+
+      let nilai = 0;
+
+      const soal = [
+        {
+          img: "ikan.png",
+          benar: "Ikan",
+          pilihan: ["Ikan", "Ayam", "Kucing"],
+        },
+        {
+          img: "lumba-lumba.png",
+          benar: "Lumba-lumba",
+          pilihan: ["Sapi", "Lumba-lumba", "Burung"],
+        },
+        {
+          img: "gurita.png",
+          benar: "Gurita",
+          pilihan: ["Ular", "Gurita", "Kelinci"],
+        },
+        {
+          img: "hiu.png",
+          benar: "Hiu",
+          pilihan: ["Hiu", "Gajah", "Kuda"],
+        },
+        {
+          img: "penyu.png",
+          benar: "Penyu",
+          pilihan: ["Penyu", "Kucing", "Ayam"],
+        },
+        {
+          img: "kepiting.png",
+          benar: "Kepiting",
+          pilihan: ["Kepiting", "Singa", "Bebek"],
+        },
+        {
+          img: "ikan-buntal.png",
+          benar: "Ikan Buntal",
+          pilihan: ["Ikan Buntal", "Harimau", "Sapi"],
+        },
+        {
+          img: "paus.png",
+          benar: "Paus",
+          pilihan: ["Paus", "Kuda", "Ayam"],
+        },
+        {
+          img: "udang.png",
+          benar: "Udang",
+          pilihan: ["Udang", "Kucing", "Sapi"],
+        },
+        {
+          img: "cumi.png",
+          benar: "Cumi-cumi",
+          pilihan: ["Cumi-cumi", "Ular", "Kuda"],
+        },
+      ];
+
+      let nomor = 0;
+
+      function tampilSoal() {
+        document.getElementById("nomor").innerText = nomor + 1;
+        document.getElementById("gambar").src = soal[nomor].img;
+        document.getElementById("pesan").innerText = "";
+
+        let tombol = "";
+        soal[nomor].pilihan.forEach((j) => {
+          tombol += `<button onclick="cek('${j}')">${j}</button>`;
+        });
+        document.getElementById("jawaban").innerHTML = tombol;
+      }
+
+      function cek(jawaban) {
+        if (jawaban === soal[nomor].benar) {
+          document.getElementById("audioBenar").play();
+          document.getElementById("pesan").innerText = "🎉 Hebat! Kamu pintar!";
+          nomor++;
+
+          if (nomor < soal.length) {
+            setTimeout(tampilSoal, 1200);
+          } else {
+            document.querySelector(".game-box").innerHTML =
+              "<h1>⭐⭐⭐ SELAMAT ⭐⭐⭐</h1><p>Kamu hebat!</p>";
+          }
+        } else {
+          document.getElementById("audioSalah").play();
+          document.getElementById("pesan").innerText = "😊 Ayo coba lagi";
+        }
+      }
+
+      tampilSoal();
+    </script>
+  </body>
+</html>
